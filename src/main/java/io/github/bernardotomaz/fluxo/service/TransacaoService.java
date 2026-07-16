@@ -1,76 +1,65 @@
 package io.github.bernardotomaz.fluxo.service;
 
-import io.github.bernardotomaz.fluxo.exceptions.TransacaoInvalidaException;
+import io.github.bernardotomaz.fluxo.dto.request.TransacaoRequestDTO;
+import io.github.bernardotomaz.fluxo.dto.response.TransacaoResponseDTO;
+import io.github.bernardotomaz.fluxo.entity.Categoria;
+
 import io.github.bernardotomaz.fluxo.entity.Transacao;
 
 import io.github.bernardotomaz.fluxo.exceptions.TransacaoNaoEncontradaException;
+import io.github.bernardotomaz.fluxo.mapper.TransacaoMapper;
 import io.github.bernardotomaz.fluxo.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 @Service
 public class TransacaoService {
 
     private final TransacaoRepository transacaoRepository;
+    private final CategoriaService categoriaService;
+    private final TransacaoMapper transacaoMapper;
 
-    public TransacaoService(TransacaoRepository transacaoRepository) {
+    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaService categoriaService, TransacaoMapper transacaoMapper) {
         this.transacaoRepository = transacaoRepository;
+        this.categoriaService = categoriaService;
+        this.transacaoMapper = transacaoMapper;
     }
 
-
-    //VALIDAÇÕES
-    public void validarTransacao(Transacao transacao){
-        //VERIFICA O NOME
-        if (transacao.getNome() == null || transacao.getNome().isBlank()){
-            throw new TransacaoInvalidaException("Nome inválido.");
-        }
-        //VERIFICA SE TEM VALOR
-        if (transacao.getValor() == null){
-            throw new TransacaoInvalidaException("Valor inválido!");
-        }
-        // VERIFICA SE O VALOR DA TRANSAÇÃO É IGUAL OU MENOR QUE 0
-        if (transacao.getValor().compareTo(BigDecimal.ZERO) <= 0){
-            throw new TransacaoInvalidaException("Valor menor ou igual a zero!");
-        }
-        // VERIFICA O TIPO
-        if (transacao.getTipo() == null) {
-            throw new TransacaoInvalidaException("Tipo inválido!");
-        }
-        // VERIFICA CATEGORIA
-        if (transacao.getCategoria() == null){
-            throw new TransacaoInvalidaException("Categoria inválida!");
-        }
-        // VERIFICA DATA
-        if (transacao.getDataTransacao() == null){
-            throw new TransacaoInvalidaException("Data inválida!");
-        }
-    }
-
-
-    public Transacao buscarPorId(Long id) {
+    private Transacao buscarEntidade(Long id){
         return transacaoRepository.findById(id).orElseThrow(() -> new TransacaoNaoEncontradaException("Transação não encontrada."));
     }
 
-    public Transacao cadastrar(Transacao transacao){
-        validarTransacao(transacao);
-        return transacaoRepository.save(transacao);
+    public TransacaoResponseDTO buscarPorId(Long id) {
+        return transacaoMapper.toResponseDTO(buscarEntidade(id));
     }
 
-    public Transacao editar(Transacao transacao){
-        if (transacao.getId() == null) {
-            throw new TransacaoInvalidaException("ID obrigatório.");
-        }
-        buscarPorId(transacao.getId());
-        validarTransacao(transacao);
-        return transacaoRepository.save(transacao);
+    public TransacaoResponseDTO cadastrar(TransacaoRequestDTO transacaoDTO){
+        Categoria categoria = categoriaService.buscarPorId(transacaoDTO.getCategoria());
+        Transacao transacao = transacaoMapper.toEntity(transacaoDTO, categoria);
+        Transacao salva = transacaoRepository.save(transacao);
+        return transacaoMapper.toResponseDTO(salva);
+    }
+
+    public TransacaoResponseDTO editar(Long id, TransacaoRequestDTO transacaoDTO){
+
+        Transacao transacao = buscarEntidade(id);
+        Categoria categoria = categoriaService.buscarPorId(transacaoDTO.getCategoria());
+
+        transacaoMapper.updateEntity(transacao, transacaoDTO, categoria);
+
+        Transacao salva = transacaoRepository.save(transacao);
+        return transacaoMapper.toResponseDTO(salva);
     }
 
     public void excluir(Long id){
-        transacaoRepository.delete(buscarPorId(id));
+        transacaoRepository.delete(buscarEntidade(id));
     }
-    public List<Transacao> listarTodas() {
-        return transacaoRepository.findAll();
+    public List<TransacaoResponseDTO> listarTodas() {
+        return transacaoRepository.findAll()
+                .stream()
+                .map(transacaoMapper::toResponseDTO)
+                .toList();
     }
 }
