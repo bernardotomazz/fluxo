@@ -1,11 +1,13 @@
 package io.github.bernardotomaz.fluxo.service;
 
+import io.github.bernardotomaz.fluxo.dto.request.CategoriaRequestDTO;
+import io.github.bernardotomaz.fluxo.dto.response.CategoriaResponseDTO;
 import io.github.bernardotomaz.fluxo.entity.Categoria;
-import io.github.bernardotomaz.fluxo.entity.Transacao;
 import io.github.bernardotomaz.fluxo.exceptions.CategoriaInvalidaException;
 import io.github.bernardotomaz.fluxo.exceptions.CategoriaNaoEncontradaException;
+import io.github.bernardotomaz.fluxo.mapper.CategoriaMapper;
+
 import io.github.bernardotomaz.fluxo.repository.CategoriaRepository;
-import io.github.bernardotomaz.fluxo.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
 
@@ -14,45 +16,41 @@ import java.util.List;
 @Service
 public class CategoriaService {
     private final CategoriaRepository categoriaRepository;
-    public CategoriaService(CategoriaRepository categoriaRepository) {
+    private final CategoriaMapper categoriaMapper;
+
+    public CategoriaService(CategoriaRepository categoriaRepository, CategoriaMapper categoriaMapper) {
         this.categoriaRepository = categoriaRepository;
+        this.categoriaMapper = categoriaMapper;
     }
 
-    //VALIDAÇÕES
-    public void validarCategoria(Categoria categoria) {
-        //VERIFICA O NOME
-        if (categoria.getNome() == null || categoria.getNome().isBlank()) {
-            throw new CategoriaInvalidaException("Nome inválido");
-        }
-        //VERIFICA SE TEM TIPO
-        if (categoria.getTipo() == null){
-            throw new CategoriaInvalidaException("Tipo inválido!");
-        }
-    }
-
-    public Categoria buscarPorId(Long id) {
+    public Categoria buscarEntidade(Long id) {
         return categoriaRepository.findById(id).orElseThrow(() -> new CategoriaNaoEncontradaException("Categoria não encontrada"));
     }
 
-    public Categoria cadastrar(Categoria categoria) {
-        validarCategoria(categoria);
-        return categoriaRepository.save(categoria);
+    public CategoriaResponseDTO buscarPorId(Long id) {
+        return categoriaMapper.toResponseDTO(buscarEntidade(id));
     }
 
-    public Categoria editar(Categoria categoria) {
-        if (categoria.getId() == null) {
-            throw new CategoriaInvalidaException("ID obrigatório.");
-        }
-        buscarPorId(categoria.getId());
-        validarCategoria(categoria);
-        return categoriaRepository.save(categoria);
+    public CategoriaResponseDTO cadastrar(CategoriaRequestDTO categoriaDTO) {
+        Categoria categoria = categoriaMapper.toEntity(categoriaDTO);
+        Categoria salva =  categoriaRepository.save(categoria);
+        return categoriaMapper.toResponseDTO(salva);
+    }
+
+    public CategoriaResponseDTO editar(Long id, CategoriaRequestDTO categoriaDTO) {
+
+        Categoria categoria = buscarEntidade(id);
+
+        categoriaMapper.updateEntity(categoria, categoriaDTO);
+        Categoria salva = categoriaRepository.save(categoria);
+        return categoriaMapper.toResponseDTO(salva);
     }
 
     public void excluir(Long id){
-        categoriaRepository.delete(buscarPorId(id));
+        categoriaRepository.delete(buscarEntidade(id));
     }
-    public List<Categoria> listarTodas() {
-        return categoriaRepository.findAll();
+    public List<CategoriaResponseDTO> listarTodas() {
+        return categoriaRepository.findAll().stream().map(categoriaMapper::toResponseDTO).toList();
     }
 }
 

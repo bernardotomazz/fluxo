@@ -1,8 +1,11 @@
 package io.github.bernardotomaz.fluxo.controller;
 
 
+import io.github.bernardotomaz.fluxo.dto.request.MetaRequestDTO;
+import io.github.bernardotomaz.fluxo.dto.response.MetaResponseDTO;
 import io.github.bernardotomaz.fluxo.entity.Meta;
 import io.github.bernardotomaz.fluxo.service.MetaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,19 +21,18 @@ public class MetaController {
     }
 
     @PostMapping
-    public Meta cadastrar(@RequestBody Meta meta) {
+    public MetaResponseDTO cadastrar(@Valid @RequestBody MetaRequestDTO meta) {
         return metaService.cadastrar(meta);
     }
 
     @GetMapping("/{id}")
-    public Meta buscarPorId(@PathVariable Long id) {
+    public MetaResponseDTO buscarPorId(@PathVariable Long id) {
         return metaService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Meta atualizar(@PathVariable Long id, @RequestBody Meta meta) {
-        meta.setId(id);
-        return metaService.editar(meta);
+    public MetaResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody MetaRequestDTO meta) {
+        return metaService.editar(id, meta);
     }
 
     @DeleteMapping("/{id}")
@@ -39,7 +41,7 @@ public class MetaController {
     }
 
     @GetMapping
-    public List<Meta> listarTodas() {
+    public List<MetaResponseDTO> listarTodas() {
         return metaService.listarTodas();
     }
 }

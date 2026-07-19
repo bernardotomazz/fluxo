@@ -36,7 +36,7 @@ public class TransacaoService {
     }
 
     public TransacaoResponseDTO cadastrar(TransacaoRequestDTO transacaoDTO){
-        Categoria categoria = categoriaService.buscarPorId(transacaoDTO.getCategoria());
+        Categoria categoria = categoriaService.buscarEntidade(transacaoDTO.getCategoria());
         Transacao transacao = transacaoMapper.toEntity(transacaoDTO, categoria);
         Transacao salva = transacaoRepository.save(transacao);
         return transacaoMapper.toResponseDTO(salva);
@@ -45,7 +45,7 @@ public class TransacaoService {
     public TransacaoResponseDTO editar(Long id, TransacaoRequestDTO transacaoDTO){
 
         Transacao transacao = buscarEntidade(id);
-        Categoria categoria = categoriaService.buscarPorId(transacaoDTO.getCategoria());
+        Categoria categoria = categoriaService.buscarEntidade(transacaoDTO.getCategoria());
 
         transacaoMapper.updateEntity(transacao, transacaoDTO, categoria);
 

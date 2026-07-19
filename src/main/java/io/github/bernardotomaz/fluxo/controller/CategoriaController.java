@@ -1,7 +1,9 @@
 package io.github.bernardotomaz.fluxo.controller;
 
-import io.github.bernardotomaz.fluxo.entity.Categoria;
+import io.github.bernardotomaz.fluxo.dto.request.CategoriaRequestDTO;
+import io.github.bernardotomaz.fluxo.dto.response.CategoriaResponseDTO;
 import io.github.bernardotomaz.fluxo.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,19 +18,18 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria cadastrar(@RequestBody Categoria categoria) {
+    public CategoriaResponseDTO cadastrar(@Valid @RequestBody CategoriaRequestDTO categoria) {
         return categoriaService.cadastrar(categoria);
     }
 
     @GetMapping("/{id}")
-    public Categoria buscarPorId(@PathVariable Long id) {
+    public CategoriaResponseDTO buscarPorId(@PathVariable Long id) {
         return categoriaService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Categoria atualizar(@PathVariable Long id, @RequestBody Categoria categoria) {
-        categoria.setId(id);
-        return categoriaService.editar(categoria);
+    public CategoriaResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody CategoriaRequestDTO categoria) {
+        return categoriaService.editar(id, categoria);
     }
 
     @DeleteMapping("/{id}")
@@ -37,7 +38,7 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<Categoria> listarTodas() {
+    public List<CategoriaResponseDTO> listarTodas() {
         return categoriaService.listarTodas();
     }
 }
