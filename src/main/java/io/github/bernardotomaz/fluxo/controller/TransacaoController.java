@@ -3,10 +3,13 @@ package io.github.bernardotomaz.fluxo.controller;
 import io.github.bernardotomaz.fluxo.dto.request.TransacaoRequestDTO;
 import io.github.bernardotomaz.fluxo.dto.response.TransacaoResponseDTO;
 
+import io.github.bernardotomaz.fluxo.enums.TipoTransacao;
 import io.github.bernardotomaz.fluxo.service.TransacaoService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -41,8 +44,12 @@ public class TransacaoController {
     }
 
     @GetMapping
-    public List<TransacaoResponseDTO> listarTodas() {
-        return transacaoService.listarTodas();
+    public List<TransacaoResponseDTO> listar(@RequestParam(required = false) String nome,
+                                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+                                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim,
+                                             @RequestParam(required = false) Long idCategoria,
+                                             @RequestParam(required = false) TipoTransacao tipoTransacao) {
+        return transacaoService.listar(nome, dataInicio, dataFim, idCategoria, tipoTransacao);
     }
 
 }
