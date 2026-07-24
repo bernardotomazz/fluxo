@@ -3,11 +3,14 @@ package io.github.bernardotomaz.fluxo.service;
 import io.github.bernardotomaz.fluxo.dto.request.CategoriaRequestDTO;
 import io.github.bernardotomaz.fluxo.dto.response.CategoriaResponseDTO;
 import io.github.bernardotomaz.fluxo.entity.Categoria;
+import io.github.bernardotomaz.fluxo.enums.TipoTransacao;
 import io.github.bernardotomaz.fluxo.exceptions.CategoriaInvalidaException;
 import io.github.bernardotomaz.fluxo.exceptions.CategoriaNaoEncontradaException;
 import io.github.bernardotomaz.fluxo.mapper.CategoriaMapper;
 
 import io.github.bernardotomaz.fluxo.repository.CategoriaRepository;
+import io.github.bernardotomaz.fluxo.specification.CategoriaSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -49,8 +52,18 @@ public class CategoriaService {
     public void excluir(Long id){
         categoriaRepository.delete(buscarEntidade(id));
     }
-    public List<CategoriaResponseDTO> listarTodas() {
-        return categoriaRepository.findAll().stream().map(categoriaMapper::toResponseDTO).toList();
+
+
+    public List<CategoriaResponseDTO> listar(String nome,  TipoTransacao tipo) {
+        Specification<Categoria> spec = Specification.unrestricted();
+        if (nome != null && !nome.isBlank()) {
+            spec = spec.and(CategoriaSpecification.nome(nome));
+        }
+        if (tipo != null) {
+            spec = spec.and(CategoriaSpecification.tipo(tipo));
+        }
+        return categoriaRepository.findAll(spec)
+                .stream().map(categoriaMapper::toResponseDTO).toList();
     }
 }
 

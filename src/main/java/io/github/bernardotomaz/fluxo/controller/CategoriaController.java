@@ -2,8 +2,10 @@ package io.github.bernardotomaz.fluxo.controller;
 
 import io.github.bernardotomaz.fluxo.dto.request.CategoriaRequestDTO;
 import io.github.bernardotomaz.fluxo.dto.response.CategoriaResponseDTO;
+import io.github.bernardotomaz.fluxo.enums.TipoTransacao;
 import io.github.bernardotomaz.fluxo.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +40,9 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<CategoriaResponseDTO> listarTodas() {
-        return categoriaService.listarTodas();
+    public List<CategoriaResponseDTO> listar(@RequestParam(required = false) String nome,
+                                             @RequestParam(required = false) TipoTransacao tipo) {
+        return categoriaService.listar(nome, tipo);
     }
 }
 

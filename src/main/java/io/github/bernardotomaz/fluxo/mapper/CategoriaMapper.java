@@ -17,7 +17,7 @@ public class CategoriaMapper {
         categoria.setNome(categoriaRequestDTO.getNome());
         categoria.setCor(categoriaRequestDTO.getCor());
         categoria.setIcon(categoriaRequestDTO.getIcon());
-        categoria.setTipo(categoriaRequestDTO.getTipo().name());
+        categoria.setTipo(categoriaRequestDTO.getTipo());
     }
 
     public CategoriaResponseDTO toResponseDTO(Categoria categoria) {

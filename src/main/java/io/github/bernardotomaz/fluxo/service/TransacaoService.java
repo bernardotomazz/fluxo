@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,15 +73,27 @@ public class TransacaoService {
         if (nome != null && !nome.isBlank()) {
             spec = spec.and(TransacaoSpecification.nome(nome));
         }
+        ///
         if (tipo != null) {
             spec = spec.and(TransacaoSpecification.tipo(tipo));
         }
+        ///
         if (dataInicio != null && dataFim != null) {
-            spec = spec.and(TransacaoSpecification.dataTransacao(dataInicio, dataFim));
+            spec = spec.and(TransacaoSpecification.dataTransacaoEntre(dataInicio, dataFim));
         }
+
+        else if (dataInicio != null) {
+            spec = spec.and(TransacaoSpecification.dataTransacaoInicio(dataInicio));
+        }
+
+        else if (dataFim != null) {
+            spec = spec.and(TransacaoSpecification.dataTransacaoFim(dataFim));
+        }
+        ///
         if (idCategoria != null) {
             spec = spec.and(TransacaoSpecification.categoria(idCategoria));
         }
+        ///
         return transacaoRepository.findAll(spec).stream().map(transacaoMapper::toResponseDTO).toList();
     }
 }

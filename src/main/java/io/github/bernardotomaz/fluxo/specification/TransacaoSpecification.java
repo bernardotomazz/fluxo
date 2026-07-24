@@ -14,8 +14,14 @@ public class TransacaoSpecification {
     public static Specification<Transacao> categoria(Long id){
         return (root, query, cb) -> cb.equal(root.get("categoria").get("id"), id);
     }
-    public static Specification<Transacao> dataTransacao(LocalDate dataInicio, LocalDate dataFim){
+    public static Specification<Transacao> dataTransacaoEntre(LocalDate dataInicio, LocalDate dataFim){
         return (root, query, cb) -> cb.between(root.get("dataTransacao"), dataInicio, dataFim);
+    }
+    public static Specification<Transacao> dataTransacaoInicio(LocalDate dataInicio){
+        return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("dataTransacao"), dataInicio);
+    }
+    public static Specification<Transacao> dataTransacaoFim(LocalDate dataFim){
+        return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("dataTransacao"), dataFim);
     }
     public static Specification<Transacao> nome (String nome){
         String nomePesquisa = nome.toLowerCase().trim();

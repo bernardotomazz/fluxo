@@ -1,11 +1,13 @@
 package io.github.bernardotomaz.fluxo.dto.response;
 
+import io.github.bernardotomaz.fluxo.enums.TipoTransacao;
+
 public class CategoriaResponseDTO {
     private Long id;
     private String nome;
     private String icon;
     private String cor;
-    private String tipo;
+    private TipoTransacao tipo;
 
     //GETTERS e SETTERS
     public Long getId() {
@@ -40,11 +42,11 @@ public class CategoriaResponseDTO {
         this.cor = cor;
     }
 
-    public String getTipo() {
+    public TipoTransacao getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoTransacao tipo) {
         this.tipo = tipo;
     }
 }

@@ -1,9 +1,7 @@
 package io.github.bernardotomaz.fluxo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import io.github.bernardotomaz.fluxo.enums.TipoTransacao;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -14,12 +12,13 @@ public class Categoria {
     private String nome;
     private String icon;
     private String cor;
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoTransacao tipo;
 
     public Categoria() {
     }
 
-    public Categoria(String nome, String icon, String color, String tipo) {
+    public Categoria(String nome, String icon, String color, TipoTransacao tipo) {
         this.nome = nome;
         this.icon = icon;
         this.cor = color;
@@ -45,7 +44,7 @@ public class Categoria {
         return cor;
     }
 
-    public String getTipo() {
+    public TipoTransacao getTipo() {
         return tipo;
     }
 
@@ -66,7 +65,7 @@ public class Categoria {
         this.cor = cor;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoTransacao tipo) {
         this.tipo = tipo;
     }
 }
