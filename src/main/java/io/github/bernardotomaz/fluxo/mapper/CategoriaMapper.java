@@ -1,6 +1,7 @@
 package io.github.bernardotomaz.fluxo.mapper;
 
 import io.github.bernardotomaz.fluxo.dto.request.CategoriaRequestDTO;
+import io.github.bernardotomaz.fluxo.dto.response.CategoriaDashboardDTO;
 import io.github.bernardotomaz.fluxo.dto.response.CategoriaResponseDTO;
 import io.github.bernardotomaz.fluxo.entity.Categoria;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,14 @@ public class CategoriaMapper {
         categoriaDTO.setIcon(categoria.getIcon());
         categoriaDTO.setTipo(categoria.getTipo());
         return categoriaDTO;
+    }
+
+    public CategoriaDashboardDTO toDashboardDTO(Categoria categoria) {
+        CategoriaDashboardDTO categoriaDashboardDTO = new CategoriaDashboardDTO();
+        categoriaDashboardDTO.setId(categoria.getId());
+        categoriaDashboardDTO.setNome(categoria.getNome());
+        categoriaDashboardDTO.setCor(categoria.getCor());
+        categoriaDashboardDTO.setIcon(categoria.getIcon());
+        return categoriaDashboardDTO;
     }
 }
