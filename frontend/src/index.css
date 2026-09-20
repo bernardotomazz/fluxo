@@ -1,0 +1,201 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/ibm-plex-sans";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "IBM Plex Sans Variable", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+}
+
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f3f3;
+  --secondary-foreground: #111111;
+  --muted: #f3f3f3;
+  --muted-foreground: #5e5e5e;
+  --accent: #146b4a;
+  --accent-foreground: #ffffff;
+  --destructive: #c63c32;
+  --destructive-foreground: #ffffff;
+  --border: #d8d8d8;
+  --input: #d8d8d8;
+  --ring: #276ef1;
+  --positive: #087f5b;
+  --negative: #c63c32;
+  --warning: #8a5500;
+  --info: #276ef1;
+  --surface-raised: #ffffff;
+  --selection: #cce9dc;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #0f0f0f;
+  --foreground: #f7f7f7;
+  --card: #222222;
+  --card-foreground: #f7f7f7;
+  --popover: #222222;
+  --popover-foreground: #f7f7f7;
+  --primary: #ffffff;
+  --primary-foreground: #0f0f0f;
+  --secondary: #181818;
+  --secondary-foreground: #f7f7f7;
+  --muted: #181818;
+  --muted-foreground: #a6a6a6;
+  --accent: #4fd49a;
+  --accent-foreground: #0f0f0f;
+  --destructive: #ff776d;
+  --destructive-foreground: #0f0f0f;
+  --border: #333333;
+  --input: #333333;
+  --ring: #6ea0ff;
+  --positive: #4fd49a;
+  --negative: #ff776d;
+  --warning: #f4b860;
+  --info: #6ea0ff;
+  --surface-raised: #222222;
+  --selection: #164c39;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    min-width: 320px;
+    background: var(--background);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-width: 320px;
+    margin: 0;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    letter-spacing: 0;
+  }
+
+  button,
+  [role="button"] {
+    min-height: 44px;
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-color: var(--muted-foreground) var(--secondary);
+    scrollbar-width: thin;
+  }
+}
+
+@layer utilities {
+  .financial-number {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .technical-label {
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  .fluxometer-display {
+    font-family: "Fraunces Variable", serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .app-panel {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface-raised);
+  }
+
+}
+
+.dashboard-layout {
+  display: grid;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.dashboard-main,
+.dashboard-side {
+  min-width: 0;
+}
+
+.dashboard-main > *,
+.dashboard-side > * {
+  width: 100%;
+}
+
+@media (min-width: 1280px) {
+  .dashboard-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

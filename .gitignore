@@ -1,43 +1,29 @@
-HELP.md
+# Build artifacts and dependencies
+/backend/target/
+/backend/.mvn/wrapper/maven-wrapper.jar
+/frontend/node_modules/
+/frontend/dist/
 
-target/
-.mvn/wrapper/maven-wrapper.jar
+# Local configuration and secrets
+**/.env
+**/.env.*
+!**/.env.example
+/backend/src/main/resources/application.properties
 
-### Spring Boot ###
-src/main/resources/application.properties
+# Logs and local runtime files
+**/*.log
+/runtime-logs/
 
-### IntelliJ IDEA ###
+# IDE and operating-system files
 .idea/
-*.iml
-*.ipr
-*.iws
-
-### VS Code ###
 .vscode/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-
-### Logs ###
-*.log
-
-### Sistema Operacional ###
+**/*.iml
 .DS_Store
 Thumbs.db
 
-### Variáveis de ambiente ###
-.env
+# Local source backups and analysis material
+/fluxo/
+/fluxo-frontend/
+/repo-publicado-analise/
+/.impeccable/
+/PRODUCT.md
